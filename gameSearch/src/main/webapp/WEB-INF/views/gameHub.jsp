@@ -297,9 +297,7 @@
 			<option value="Funny">재미</option>
 			<option value="Fighting">격투</option>
 			<option value="Puzzle">퍼즐</option>
-			<option value="Rogue-like">로그라이크</option>
-			<option value="Rogue-lite">로그라이트</option>
-			<option value="Metroidvania">메트로바니아</option>
+			<option value="Roguelike">로그라이크</option>
 			<option value="Building">건축</option>
 			<option value="City">도시 건설</option>
 			<option value="Sports">스포츠</option>

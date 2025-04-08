@@ -8,7 +8,7 @@
     		and upper(game_name) like upper('%${keyword}%')
 		</if>
 		<if test="ratings!=null and ratings.length()>0">
-    		and ratings like #{ratings}
+    		and ratings=#{ratings}
 		</if>
 		<if test="categories!=null and categories.length()>0">
     		and upper(categories) like upper('%${categories}%')
@@ -17,14 +17,17 @@
     		and upper(genres) like upper('%${genres}%')
 		</if>
 		<if test="tags!=null and tags.length()>0">
-    		and upper(tags) like upper('%${tags}%')
-			<if test="!tags.equals('HENTAI')">
-	    		and(
-			        upper(tags) not like '%HENTAI%' 
-			        and upper(tags) not like '%SEXUAL CONTENT%' 
-			        and upper(tags) not like '%NUDITY%'
+		    <if test="!tags.equals('Roguelike')">
+    			and upper(tags) like upper('%${tags}%')
+    		</if>
+    		<if test="tags.equals('Roguelike')">
+				and(
+			        upper(tags) like upper('%Roguelike%') 
+			        or upper(tags) like upper('%Rogue-like%')
+			        or upper(tags) like upper('%Rogue-lite%')
+			        or upper(tags) like upper('%Metroidvania%') 
 		        )
-			</if>
+    		</if>
 		</if>
 		<if test="tags==null or tags.length()==0">
 			and(
