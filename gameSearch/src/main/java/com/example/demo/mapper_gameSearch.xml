@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.GameSearchDAO">
+
+	<sql id="boardWhere">
+		<if test="keyword!=null and keyword.length()>0">
+    		and upper(game_name) like upper('%${keyword}%')
+		</if>
+		<if test="ratings!=null and ratings.length()>0">
+    		and ratings like #{ratings}
+		</if>
+		<if test="categories!=null and categories.length()>0">
+    		and upper(categories) like upper('%${categories}%')
+		</if>
+		<if test="genres!=null and genres.length()>0">
+    		and upper(genres) like upper('%${genres}%')
+		</if>
+		<if test="tags!=null and tags.length()>0">
+    		and upper(tags) like upper('%${tags}%')
+			<if test="!tags.equals('HENTAI')">
+	    		and(
+			        upper(tags) not like '%HENTAI%' 
+			        and upper(tags) not like '%SEXUAL CONTENT%' 
+			        and upper(tags) not like '%NUDITY%'
+		        )
+			</if>
+		</if>
+		<if test="tags==null or tags.length()==0">
+			and(
+		        upper(tags) not like '%HENTAI%' 
+		        and upper(tags) not like '%SEXUAL CONTENT%' 
+		        and upper(tags) not like '%NUDITY%'
+	        )
+		</if>
+	</sql>
+	
+	<select id="getSearchResultCount" parameterType="com.example.demo.GameSearchDTO" resultType="int">
+		select
+			count(*)
+		from
+			games
+		where
+			1=1
+			<include refid="boardWhere"/>
+	</select>
+	
+	<select id="search" parameterType="com.example.demo.GameSearchDTO" resultType="java.util.HashMap">
+		select * from ( select  rownum RNUM, zxcvb.* from  (
+	    
+			select
+                header_image as "HEADER_IMAGE",
+                recommendations as "RECOMMENDATIONS",
+                game_name as "GAME_NAME",
+                ratings as "RATINGS",
+                replace(categories, ',', ', ') as "CATEGORIES",
+                price as "PRICE",
+                genres as "GENRES",
+                tags as "TAGS",
+                appid as "APPID",
+    			substr(release_date,1,4) || '/' || substr(release_date,5,2) || '/' || substr(release_date,7,2) as "RELEASE_DATE"
+			from
+				games
+			where
+				1=1
+				<include refid="boardWhere"/>
+			order by
+    			${sort}
+			
+	<![CDATA[
+        ) zxcvb) where  RNUM  >= ${begin_rowNo}  and RNUM <= ${end_rowNo}
+    ]]>
+	</select>
+		
+	
+</mapper>

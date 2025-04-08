@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.SteamDAO">
+
+	<select id="checkAppid" parameterType="int" resultType="int">
+		select count(*) from games where appid=#{appid}
+	</select>
+	
+	<select id="checkName" parameterType="String" resultType="int">
+		select count(*) from games where game_name=#{game_name}
+	</select>
+	
+	<insert id="insertGame" parameterType="com.example.demo.SteamDTO">
+		INSERT INTO games (
+		    header_image,
+		    recommendations,
+		    game_name,
+		    ratings,
+		    categories,
+		    price,
+		    appid,
+		    release_date
+		)
+		VALUES (
+		    #{header_image},
+		    #{recommendations},
+		    #{game_name},
+		    #{ratings},
+		    #{categories},
+		    #{price},
+		    #{appid},
+		    #{release_date}
+		)
+	</insert>
+	
+	<select id="isAppid" parameterType="java.util.HashMap" resultType="int">
+		select count(*) from appidTableaaa where appid=#{appid}
+	</select>
+	
+	<insert id="insertAppid" parameterType="java.util.HashMap">
+		insert into appidTable(
+			appid,
+			game_name
+		) values (
+			#{appid},
+			#{game_name}
+		)
+	</insert>
+	
+	<select id="getAppid" resultType="int">
+        select
+            appid
+        from
+            appidTable
+        where
+            appid > nvl( (select max(appid) from games), 0 )
+			AND LOWER(game_name) NOT LIKE '%trailer%'
+			AND LOWER(game_name) NOT LIKE '%teaser%'
+			AND LOWER(game_name) NOT LIKE '%preview%'
+			AND LOWER(game_name) NOT LIKE '%season pass%'
+			AND LOWER(game_name) NOT LIKE '%dlc%'
+			AND LOWER(game_name) NOT LIKE '%soundtrack%'
+			AND LOWER(game_name) NOT LIKE '%ost%'
+			AND LOWER(game_name) NOT LIKE '%pack%'
+			AND LOWER(game_name) NOT LIKE '%artbook%'
+			AND LOWER(game_name) NOT LIKE '%expansion%'
+			AND LOWER(game_name) NOT LIKE '%bundle%'
+			AND LOWER(game_name) NOT LIKE '%collection%'
+			AND LOWER(game_name) NOT LIKE '%complete edition%'
+			AND LOWER(game_name) NOT LIKE '%modding%'
+			AND LOWER(game_name) NOT LIKE '%editor%'
+			AND LOWER(game_name) NOT LIKE '%wallpaper%'
+			AND LOWER(game_name) NOT LIKE '%benchmark%'
+			AND LOWER(game_name) NOT LIKE '%vr experience%'
+			AND LOWER(game_name) NOT LIKE '%prologue%'
+        order by
+            appid asc
+	</select>
+	
+	<select id="getGamesAppid" resultType="int">
+		select appid from games where tags is null or tags=''
+	</select>
+	
+	<update id="updateGenresTags" parameterType="java.util.HashMap">
+	        UPDATE
+	        	games
+	        SET
+	        	genres = #{genres},
+	        	tags = #{tags}
+	        WHERE
+	        	appid=#{appid}
+	</update>
+	
+	<insert id="insertNewGame" parameterType="com.example.demo.SteamDTO">
+		INSERT INTO games (
+		    header_image,
+		    recommendations,
+		    game_name,
+		    ratings,
+		    categories,
+		    price,
+		    appid,
+		    release_date,
+		    genres,
+		    tags
+		)
+		VALUES (
+		    #{header_image},
+		    #{recommendations},
+		    #{game_name},
+		    #{ratings},
+		    #{categories},
+		    #{price},
+		    #{appid},
+		    #{release_date},
+		    #{genres},
+		    #{tags}
+		)
+	</insert>
+	
+	
+	
+</mapper>
