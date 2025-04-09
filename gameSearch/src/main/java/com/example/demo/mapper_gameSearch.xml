@@ -28,6 +28,13 @@
 			        or upper(tags) like upper('%Metroidvania%') 
 		        )
     		</if>
+    		<if test="!tags.equals('Hentai')">
+				and(
+			        upper(tags) not like '%HENTAI%' 
+			        and upper(tags) not like '%SEXUAL CONTENT%' 
+			        and upper(tags) not like '%NUDITY%'
+		        )
+			</if>
 		</if>
 		<if test="tags==null or tags.length()==0">
 			and(
@@ -35,6 +42,9 @@
 		        and upper(tags) not like '%SEXUAL CONTENT%' 
 		        and upper(tags) not like '%NUDITY%'
 	        )
+		</if>
+		<if test="free!=null and free==true">
+			and price=0
 		</if>
 	</sql>
 	

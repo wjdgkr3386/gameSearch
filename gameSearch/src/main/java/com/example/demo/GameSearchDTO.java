@@ -18,6 +18,8 @@ public class GameSearchDTO {
 	private int begin_rowNo;		//테이블 검색 시 시작행 번호
 	private int end_rowNo;			//테이블 검색 시 끝행 번호
 	
+	private boolean free;			//무료
+	
 	
 	public String getKeyword() {
 		return keyword;
@@ -102,6 +104,12 @@ public class GameSearchDTO {
 	}
 	public void setEnd_rowNo(int end_rowNo) {
 		this.end_rowNo = end_rowNo;
+	}
+	public boolean isFree() {
+		return free;
+	}
+	public void setFree(boolean free) {
+		this.free = free;
 	}
 	
 	

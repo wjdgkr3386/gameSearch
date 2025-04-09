@@ -11,6 +11,7 @@
 	    padding: 0;
 	    overflow-x: hidden;
 	    background-color:#f8f8f8;
+	    overflow: hidden;
 	}
 	select{
 		float: left;
@@ -46,7 +47,7 @@
 		background-color:black;
 	}
 	.search-container {
-		margin-top: 100px;
+		margin-top: 50px;
 		width: 800px;
 		height: 50px;
 		display: flex;
@@ -72,11 +73,11 @@
 	}
 	.searchFiltersBox{
 		box-sizing: border-box;
-		width: 800px;
+		width: 850px;
 		display: inline-block;
 	}
 	.searchResult-div{
-		width: 1600px;
+		width: 1300px;
 	}
 	.gameTable{
 		width: 100%;
@@ -139,7 +140,8 @@
         search(1);
     }
     
-    function popup(HEADER_IMAGE, GAME_NAME, RECOMMENDATIONS, PRICE, RELEASE_DATE, RATINGS){
+    function popup(HEADER_IMAGE, GAME_NAME, RECOMMENDATIONS, PRICE, RELEASE_DATE, RATINGS, APPID){
+    	var underGame_name = GAME_NAME.replace(" ", "_");
     	var width = 800;
     	var height = 800;
     	var left = (screen.width - width) / 2;
@@ -208,13 +210,21 @@
 							<\/td>
 						<\/tr>
 						<tr>
-							<td class="td-1">
-								<p class="header">가격<\/p>
-							<\/td>
-							<td>
-								<p>`+PRICE+`원<\/p>
-							<\/td>
-						<\/tr>
+						<td class="td-1">
+							<p class="header">가격<\/p>
+						<\/td>
+						<td>
+							<p>`+PRICE+`원<\/p>
+						<\/td>
+					<\/tr>
+					<tr>
+						<td class="td-1">
+							<p class="header">스팀 주소<\/p>
+						<\/td>
+						<td>
+							<p><a href="https:\/\/store.steampowered.com\/app\/`+APPID+`\/`+underGame_name+`\/">https:\/\/store.steampowered.com\/app\/`+APPID+`\/`+underGame_name+`\/<\a><\/p>
+						<\/td>
+					<\/tr>
 						<tr>
 							<td class="td-1">
 								<p class="header">출시일<\/p>
@@ -229,7 +239,7 @@
 							<\/td>
 							<td>
 								<p> 
-									`+(RATINGS == 18 ? "성인" : RATINGS)+`
+									`+(RATINGS == 18 ? "성인" : RATINGS+"세 이상")+`
 								<\/p>
 							<\/td>
 						<\/tr>
@@ -245,6 +255,8 @@
 </head>
 <body>
 <center>
+<div style="height:30px;"></div>
+<h1 style="cursor:pointer;" onclick="location.reload()">GameHub</h1>
 <form name="submitForm">
 	<div class="search-container">
 		<input class="searchBar" name="keyword" placeholder="검색">
@@ -290,11 +302,12 @@
 			<option value="Sandbox">샌드박스</option>
 			<option value="Story">스토리</option>
 			<option value="Horror">공포</option>
+			<option value="Dungeon Crawler">던전 크롤러</option>
 			<option value="Sci-Fi">SF</option>
 			<option value="Exploration">탐험</option>
 			<option value="Arcade">아케이드</option>
 			<option value="Zombie">좀비</option>
-			<option value="Funny">재미</option>
+			<option value="Funny">코믹</option>
 			<option value="Fighting">격투</option>
 			<option value="Puzzle">퍼즐</option>
 			<option value="Roguelike">로그라이크</option>
@@ -317,10 +330,12 @@
 			<option value="release_date desc">출시일▲</option>
 			<option value="release_date asc">출시일▼</option>
 		</select>
+		<span style="height:40px; display: flex; justify-content: center; align-items: center;;">
+			<input type="checkbox" name="free">
+			무료
+		</span>
 	</div>
-	<!-- 띄우기 -->
-	<div style="height:10px;"></div>
-
+	
 	<div class="searchResult-div">
 		<c:if test="${requestScope.searchMap.searchResultCount gt 0}">
 			<div class="searchResult">
@@ -330,7 +345,7 @@
 							<tr>
 								<c:forEach var="i" items="${requestScope.searchMap.searchList}" varStatus="status">
 									<c:if test="${status.index < 4}">
-										<td onclick="popup(`${i.HEADER_IMAGE}`, `${i.GAME_NAME}`,`${i.RECOMMENDATIONS}`,`${i.PRICE}`,`${i.RELEASE_DATE}`,`${i.RATINGS}`)">
+										<td onclick="popup(`${i.HEADER_IMAGE}`, `${i.GAME_NAME}`,`${i.RECOMMENDATIONS}`,`${i.PRICE}`,`${i.RELEASE_DATE}`,`${i.RATINGS}`,`${i.APPID}`)">
 											<img src="${i.HEADER_IMAGE}" alt="이미지 없음">
 											<span class="gameName-span">
 												<span>${i.GAME_NAME}</span>
@@ -344,7 +359,7 @@
 							<tr>
 								<c:forEach var="i" items="${requestScope.searchMap.searchList}" varStatus="status">
 									<c:if test="${status.index < 4}">
-										<td onclick="popup(`${i.HEADER_IMAGE}`, `${i.GAME_NAME}`,`${i.RECOMMENDATIONS}`,`${i.PRICE}`,`${i.RELEASE_DATE}`,`${i.RATINGS}`)">
+										<td onclick="popup(`${i.HEADER_IMAGE}`, `${i.GAME_NAME}`,`${i.RECOMMENDATIONS}`,`${i.PRICE}`,`${i.RELEASE_DATE}`,`${i.RATINGS}`,`${i.APPID}`)">
 											<img src="${i.HEADER_IMAGE}" alt="이미지 없음">
 											<span class="gameName-span">
 												<span>${i.GAME_NAME}</span>
@@ -356,7 +371,7 @@
 							<tr>
 								<c:forEach var="i" items="${requestScope.searchMap.searchList}" varStatus="status">
 									<c:if test="${status.index >= 4}">
-										<td onclick="popup(`${i.HEADER_IMAGE}`, `${i.GAME_NAME}`,`${i.RECOMMENDATIONS}`,`${i.PRICE}`,`${i.RELEASE_DATE}`,`${i.RATINGS}`)">
+										<td onclick="popup(`${i.HEADER_IMAGE}`, `${i.GAME_NAME}`,`${i.RECOMMENDATIONS}`,`${i.PRICE}`,`${i.RELEASE_DATE}`,`${i.RATINGS}`,`${i.APPID}`)">
 											<img src="${i.HEADER_IMAGE}" alt="이미지 없음">
 											<span class="gameName-span">
 												<span>${i.GAME_NAME}</span>
