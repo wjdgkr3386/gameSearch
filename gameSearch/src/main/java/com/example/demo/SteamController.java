@@ -363,11 +363,11 @@ public class SteamController {
 	}
 	
 	@RequestMapping("/newGame")
-	public String SteamGamesUpdate(
+	public Map<String,Object> SteamGamesUpdate(
 			int appid
 	) {
 		if(appid%10==0) {
-			if(steamDAO.checkAppid(appid)>0) { return "게임이 이미 존재합니다"; }
+			if(steamDAO.checkAppid(appid)>0) { return null; }
 			
 			WebClient webClient = WebClient.builder()
 	        		.codecs(configurer -> configurer
@@ -443,7 +443,7 @@ public class SteamController {
 												//idㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 												steamDTO.setAppid(appid);
 										
-												//release_dateidㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+												//release_dateㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 												Map<String,Object> release_date = (Map<String,Object>)data.get("release_date");
 												if(release_date!=null) {
 													String dateStr;
@@ -453,6 +453,9 @@ public class SteamController {
 														if(!dateStr.equals("없음") && dateStr.length()==8) {
 															steamDTO.setRelease_date(dateStr);
 															
+															if(steamDAO.insertGame(steamDTO)==0) { 
+																return null;
+															}
 															
 													    	WebClient web = WebClient.builder()
 													    	        .codecs(configurer -> configurer
@@ -517,7 +520,8 @@ public class SteamController {
 					}
 		    	}
 			}
+			return response;
 		}
-		return "";
+		return null;
 	}
 }

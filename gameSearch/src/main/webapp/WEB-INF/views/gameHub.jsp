@@ -11,7 +11,6 @@
 	    padding: 0;
 	    overflow-x: hidden;
 	    background-color:#f8f8f8;
-	    overflow: hidden;
 	}
 	select{
 		float: left;
@@ -80,12 +79,24 @@
 		width: 1300px;
 	}
 	.gameTable{
-		width: 100%;
+		width: 1300px;
+		height: 400px;
 		table-layout: fixed;
 		display: grid;
 		box-sizing: border-box;
-		border-spacing: 30 100px; /* 행 사이 간격 조절 */
+		border-spacing: 30 30px; /* 가로간격 세로간격 */
 		padding: 10px;
+	}
+	.page{
+		display:inline-block;
+		border-radius: 10px;
+		box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+		width:40px;
+		height:40px;
+		cursor:pointer;
+		text-align: center;
+		line-height: 40px;
+		margin: 0 3px;
 	}
 </style>
 <script>
@@ -123,6 +134,7 @@
 			$("[name='sortHistory']").val($("[name='sort']").val());
 		}
 		
+		$("[name='keyword']").val($("[name='keyword']").val().trim());
 		var formObj = $("[name='submitForm']");
 		ajax(
 		     "/search.do",
@@ -384,20 +396,20 @@
 					</c:choose>
 				</table>
 				<div class="pageNos" style="user-select: none;">
-				    <span style="cursor:pointer" onClick="pageNoClick(1)">[처음]</span>
-				    <span style="cursor:pointer" onClick="pageNoClick(${requestScope.searchMap.selectPageNo-1})">[이전]</span>
+				    <span class="page" style="width:50px;" onClick="pageNoClick(1)">처음</span>
+				    <span class="page" onClick="pageNoClick(${requestScope.searchMap.selectPageNo-1})">이전</span>
 				    <c:forEach var="pageNo" begin="${requestScope.searchMap.begin_pageNo}" end="${requestScope.searchMap.end_pageNo}">
 				        <c:choose>
 				            <c:when test="${requestScope.searchMap.selectPageNo==pageNo}">
-				                <span style="font-weight:bold;">${pageNo}</span>
+				                <span class="page" style="font-weight:bold; color:blue;">${pageNo}</span>
 				            </c:when>
 				            <c:otherwise>
-				                <span style="cursor:pointer" onClick="pageNoClick(${pageNo})">[${pageNo}]</span>
+				                <span class="page" onClick="pageNoClick(${pageNo})">${pageNo}</span>
 				            </c:otherwise>
 				        </c:choose>
 				    </c:forEach>
-				    <span style="cursor:pointer" onClick="pageNoClick(${requestScope.searchMap.selectPageNo+1})">[다음]</span>
-				    <span style="cursor:pointer" onClick="pageNoClick(${requestScope.searchMap.last_pageNo})">[마지막]</span>
+				    <span class="page" onClick="pageNoClick(${requestScope.searchMap.selectPageNo+1})">다음</span>
+				    <span class="page" style="width:50px;" onClick="pageNoClick(${requestScope.searchMap.last_pageNo})">마지막</span>
 				</div>
 			</div>
 		</c:if>

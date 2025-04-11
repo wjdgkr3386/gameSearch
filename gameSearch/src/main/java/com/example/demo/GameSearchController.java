@@ -20,7 +20,6 @@ public class GameSearchController {
 	@RequestMapping( value="/gameHub.do")
 	public ModelAndView gameHub(
 	) {
-		System.out.println("누가 들어옴");
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("gameHub.jsp");
 		return mav;

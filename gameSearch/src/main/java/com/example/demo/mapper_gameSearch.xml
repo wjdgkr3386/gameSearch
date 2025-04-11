@@ -22,13 +22,13 @@
     		</if>
     		<if test="tags.equals('Roguelike')">
 				and(
-			        upper(tags) like upper('%Roguelike%') 
+			        upper(tags) like upper('%Roguelike%')
 			        or upper(tags) like upper('%Rogue-like%')
 			        or upper(tags) like upper('%Rogue-lite%')
 			        or upper(tags) like upper('%Metroidvania%') 
 		        )
     		</if>
-    		<if test="!tags.equals('Hentai')">
+    		<if test="(keyword==null and keyword==0) and !tags.equals('Hentai')">
 				and(
 			        upper(tags) not like '%HENTAI%' 
 			        and upper(tags) not like '%SEXUAL CONTENT%' 
@@ -36,7 +36,7 @@
 		        )
 			</if>
 		</if>
-		<if test="tags==null or tags.length()==0">
+		<if test="(keyword==null and keyword==0) and (tags==null or tags.length()==0)">
 			and(
 		        upper(tags) not like '%HENTAI%' 
 		        and upper(tags) not like '%SEXUAL CONTENT%' 
